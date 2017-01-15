@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">    
+<meta  http-equiv = "Access-Control-Allow-Origin"  content = "*"  charset="utf-8" >
+
+<head>
+    <title>StaffDemo</title>
+    <style type="text/css">
+
+    body,input,button,select,h1{
+        font-size: 24px;
+        line-height: 1.5;
+    }
+    </style>
+</head>
+<body>
+<h1>员工查询</h1>
+<label>请输入员工编号：</label>
+<input type="text" id="keyword"/>
+<button id="search">查询</button>
+<p id="searchResult"></p>
+
+<h1>员工创建</h1>
+<label>请输入员工姓名：</label>
+<input type="text" id="staffName"/><br>
+<label>请输入员工编号：</label>
+<input type="text" id="staffNumber"/><br>
+<label>请选择员工性别：</label>
+<select id="staffSex">
+    <option>male</option>
+    <option>famale</option>
+</select><br>
+<label>请输入员工职位：</label>
+<input type="text" id="staffJob"/><br>
+<button id="save">保存</button>
+<p id="createResult"></p>
+
+<script type="text/javascript">
+    document.getElementById('search').onclick=function(){
+
+        //发送Ajax请求并处理
+        var request=new XMLHttpRequest();
+
+        request.open('GET','http://localhost/Ajax/staff/staff.php?number='+document.getElementById('keyword').value,true);
+
+        request.send();
+
+        //监听事件，改变状态
+        request.onreadystatechange=function(){
+            if(request.readyState===4){
+                if(request.status===200){
+                    document.getElementById("searchResult").innerHTML=request.responseText;
+                }else{
+                    console.log(request.status);
+                }
+            }
+        }
+    }
+
+    document.getElementById('save').onclick=function(){
+
+        //发送Ajax请求并处理
+        var request=new XMLHttpRequest();
+
+        request.open('POST','http://localhost/Ajax/staff/staff.php',true);
+
+        var data="name="+document.getElementById('staffName').value+"&number="+document.getElementById('staffNumber').value+"&sex="+document.getElementById('staffSex').value+"&job="+document.getElementById('staffJob').value;
+
+        //在open与send方法之间设置Content-Type
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded")；
+        request.send(data);
+
+        //监听事件，改变状态
+        request.onreadystatechange=function(){
+            if(request.readyState===4){
+                if(request.status===200){
+                    document.getElementById("createResult").innerHTML=request.responseText;
+                }else{
+                    console.log(request.status);
+                }
+            }
+        }
+    }
+    
+</script>
+</body>
+</html>
